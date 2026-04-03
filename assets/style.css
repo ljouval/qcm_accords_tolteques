@@ -1,0 +1,770 @@
+/* ============================================================
+   Moteur QCM — Thème Jade & Encre
+   Mobile-first : base = mobile, desktop = surcharge via min-width
+   Typographie : Playfair Display + Source Sans 3
+   Palette : ivoire profond, encre nuit, jade, terracotta doux
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+:root {
+  --ivoire:      #EEEAD8;
+  --ivoire-dark: #E0DAC0;
+  --encre:       #1C2333;
+  --encre-light: #2E3D52;
+  --encre-muted: #6B7A8D;
+  --jade:        #3D7A6F;
+  --jade-light:  #5A9E91;
+  --jade-pale:   #D6EBE8;
+  --terra:       #B85C38;
+  --terra-pale:  #F2E0D8;
+  --or:          #C9A84C;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body:    'Source Sans 3', 'Segoe UI', sans-serif;
+
+  /* Taille tactile minimale Apple/Google : 44px */
+  --touch-min: 2.75rem;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+
+html {
+  /* Empêche le zoom automatique sur les inputs iOS */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html, body { min-height: 100%; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--ivoire);
+  color: var(--encre);
+  font-weight: 300;
+  /* Évite le scroll horizontal accidentel */
+  overflow-x: hidden;
+}
+
+#app { min-height: 100vh; }
+
+/* ── Animations ── */
+@keyframes drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33%       { transform: translateY(-6px) rotate(1deg); }
+  66%       { transform: translateY(-3px) rotate(-1deg); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+.fade-up { animation: fadeUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+
+/* ── Boutons communs ──
+   min-height garantit la zone tactile 44px sur mobile */
+.btn-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: var(--touch-min);
+  padding: 0 1.25rem;
+  border: 1.5px solid var(--encre);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--encre);
+  border-radius: 2px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  /* Retour haptique sur mobile */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.btn-nav:hover, .btn-nav:active { background: var(--encre); color: var(--ivoire); }
+.btn-nav:disabled { opacity: 0.22; cursor: default; pointer-events: none; }
+
+.btn-next {
+  background: var(--jade);
+  color: var(--ivoire);
+  border-color: var(--jade);
+}
+.btn-next:hover, .btn-next:active {
+  background: var(--jade-light);
+  border-color: var(--jade-light);
+  color: var(--ivoire);
+}
+
+/* ============================================================
+   ÉCRAN 1 — Accroche (mobile-first)
+   ============================================================ */
+.intro {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro::before,
+.intro::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.intro::before {
+  width: 280px; height: 280px;
+  border: 1px solid rgba(61,122,111,0.12);
+  top: -80px; right: -80px;
+}
+.intro::after {
+  width: 180px; height: 180px;
+  border: 1px solid rgba(61,122,111,0.08);
+  bottom: -50px; left: -50px;
+}
+
+.intro-symbol {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--jade);
+  opacity: 0.7;
+  animation: drift 5s ease-in-out infinite;
+  position: relative;
+}
+
+.intro-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--jade);
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.intro-title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--encre);
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+
+.intro-accroche {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--encre-light);
+  line-height: 1.85;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* Méta : horizontal sur mobile, compact */
+.intro-meta {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border: 1.5px solid var(--ivoire-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+}
+.meta-item {
+  text-align: center;
+  flex: 1;
+  padding: 0.75rem 0.5rem;
+  border-right: 1.5px solid var(--ivoire-dark);
+}
+.meta-item:last-child { border-right: none; }
+.meta-num {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--jade);
+  display: block;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.meta-label {
+  font-family: var(--font-body);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+}
+
+#btn-decouvrir {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch-min);
+  width: 100%;
+  max-width: 320px;
+  padding: 0 2rem;
+  background: var(--jade);
+  color: var(--ivoire);
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.25s;
+  margin-bottom: 1.25rem;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+#btn-decouvrir:hover, #btn-decouvrir:active { background: var(--jade-light); }
+
+.intro-auteur {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--encre-muted);
+  position: relative;
+}
+
+/* ============================================================
+   ÉCRAN 2 — Présentation (mobile-first)
+   ============================================================ */
+.presentation {
+  padding: 2.5rem 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.presentation-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.presentation-titre {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--encre);
+  margin-bottom: 0.5rem;
+}
+
+.presentation-sous {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  color: var(--encre-muted);
+}
+
+/* Mobile : 1 colonne */
+.accords-grille {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  flex: 1;
+  margin-bottom: 2rem;
+}
+
+.accord-card {
+  background: white;
+  border: 1.5px solid var(--ivoire-dark);
+  border-top: 3px solid var(--jade);
+  padding: 1.25rem;
+  border-radius: 2px;
+  /* Pas de hover sur mobile */
+}
+
+.accord-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.accord-card-icone {
+  font-size: 1.3rem;
+  color: var(--jade);
+  line-height: 1;
+}
+
+.accord-card-num {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+}
+
+.accord-card-nom {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--encre);
+  margin-bottom: 0.6rem;
+}
+
+.accord-card-texte {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--encre-light);
+}
+
+/* Navigation mobile : boutons pleine largeur empilés */
+.presentation-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.presentation-nav .btn-nav {
+  width: 100%;
+}
+
+/* ============================================================
+   ÉCRAN 3 — Quiz (mobile-first)
+   ============================================================ */
+.quiz-main {
+  min-height: 100vh;
+  padding: 1.75rem 1.25rem 2rem;
+  /* Pas de max-width sur mobile */
+}
+
+.progress-track {
+  width: 100%;
+  height: 3px;
+  background: var(--ivoire-dark);
+  margin-bottom: 0.4rem;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--jade);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.progress-label {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+  display: block;
+  text-align: right;
+  margin-bottom: 2rem;
+}
+
+.q-number {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 400;
+  color: var(--ivoire-dark);
+  line-height: 1;
+  margin-bottom: -0.5rem;
+  user-select: none;
+}
+
+.q-text {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--encre);
+  margin-bottom: 1.75rem;
+}
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+
+/* Options : zone tactile généreuse */
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  min-height: var(--touch-min);
+  padding: 0.9rem 1rem;
+  border: 1.5px solid var(--ivoire-dark);
+  background: white;
+  cursor: pointer;
+  text-align: left;
+  position: relative;
+  transition: border-color 0.15s, background 0.15s;
+  width: 100%;
+  border-radius: 2px;
+  /* Supprime le délai tactile 300ms */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.opt::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--jade);
+  border-radius: 2px 0 0 2px;
+  transform: scaleY(0);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Active state pour le feedback tactile */
+.opt:active { background: var(--jade-pale); border-color: var(--jade-light); }
+.opt:active::before { transform: scaleY(1); }
+.opt.sel { border-color: var(--jade); background: var(--jade-pale); }
+.opt.sel::before { transform: scaleY(1); }
+
+.opt-letter {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--jade);
+  min-width: 18px;
+  flex-shrink: 0;
+  padding-top: 0.1rem;
+}
+.opt-text {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--encre-light);
+  flex: 1;
+}
+.opt.sel .opt-text { color: var(--encre); font-weight: 400; }
+
+/* Navigation quiz : Retour discret, Suivant pleine largeur */
+.quiz-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+.quiz-nav .btn-nav {
+  width: 100%;
+}
+/* Retour moins proéminent */
+.quiz-nav #btn-back {
+  order: 2;
+  background: transparent;
+  font-weight: 400;
+  opacity: 0.7;
+  border-color: var(--ivoire-dark);
+  color: var(--encre-muted);
+}
+.quiz-nav #btn-back:not(:disabled):hover,
+.quiz-nav #btn-back:not(:disabled):active {
+  opacity: 1;
+  background: var(--ivoire-dark);
+  color: var(--encre);
+  border-color: var(--encre-muted);
+}
+.quiz-nav #btn-next { order: 1; }
+
+/* ============================================================
+   ÉCRAN 4 — Résultats (mobile-first)
+   ============================================================ */
+.results-hero {
+  background: var(--encre);
+  color: var(--ivoire);
+  padding: 3.5rem 1.5rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.results-hero::before {
+  content: '';
+  position: absolute;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  border: 1px solid rgba(61,122,111,0.2);
+  top: -100px; right: -80px;
+  pointer-events: none;
+}
+
+.results-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--jade-light);
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+.results-profile-name {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ivoire);
+  margin-bottom: 1.25rem;
+  position: relative;
+  line-height: 1.3;
+}
+.results-profile-desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.85;
+  color: rgba(238,234,216,0.65);
+  position: relative;
+}
+
+.results-body { padding: 2.5rem 1.25rem; }
+
+.results-section-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--encre);
+  margin-bottom: 1.25rem;
+}
+
+/* Scores : 1 colonne sur mobile */
+.scores-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+  margin-bottom: 2.5rem;
+}
+
+.score-card {
+  background: white;
+  border: 1.5px solid var(--ivoire-dark);
+  border-top: 3px solid var(--accord-color, var(--jade));
+  padding: 1.25rem;
+  border-radius: 2px;
+}
+.sc-accord {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+  margin-bottom: 0.4rem;
+}
+.sc-level-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--encre);
+  margin-bottom: 0.7rem;
+}
+.sc-bar {
+  height: 3px;
+  background: var(--ivoire-dark);
+  margin-bottom: 0.5rem;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.sc-bar-fill {
+  height: 100%;
+  background: var(--accord-color, var(--jade));
+  width: 0%;
+  border-radius: 2px;
+  transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sc-meta { display: flex; justify-content: space-between; align-items: center; }
+.sc-score-text {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: var(--encre-muted);
+}
+.sc-level-badge {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  background: var(--jade-pale);
+  color: var(--jade);
+  border-radius: 2px;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.insight-item {
+  display: flex;
+  background: white;
+  border: 1.5px solid var(--ivoire-dark);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.insight-stripe { width: 4px; background: var(--accord-color, var(--jade)); flex-shrink: 0; }
+.insight-body { padding: 1rem 1.25rem; }
+.insight-label {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+  margin-bottom: 0.35rem;
+}
+.insight-text {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--encre-light);
+}
+
+/* Durée : vertical sur mobile */
+.duree-bloc {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border: 1.5px solid var(--ivoire-dark);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+.duree-item { text-align: center; padding: 1.25rem; }
+.duree-item:first-child {
+  border-bottom: 1.5px solid var(--ivoire-dark);
+}
+.duree-val {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--jade);
+  margin-bottom: 0.2rem;
+}
+.duree-lbl {
+  font-family: var(--font-body);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--encre-muted);
+}
+/* sep masqué en mobile (remplacé par border-bottom) */
+.duree-sep { display: none; }
+
+/* Actions : boutons empilés pleine largeur */
+.results-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2rem 1.25rem;
+  border-top: 1.5px solid var(--ivoire-dark);
+}
+.results-actions .btn-nav {
+  width: 100%;
+}
+
+/* ============================================================
+   TABLETTE — 640px+
+   ============================================================ */
+@media (min-width: 640px) {
+
+  .intro { padding: 4rem 2.5rem; }
+  .intro::before { width: 400px; height: 400px; top: -100px; right: -100px; }
+  .intro::after  { width: 240px; height: 240px; bottom: -60px; left: -60px; }
+  .intro-title   { font-size: 3rem; }
+  .intro-accroche { font-size: 1rem; max-width: 480px; }
+  .intro-meta    { max-width: 380px; }
+  .meta-num      { font-size: 1.8rem; }
+  .meta-item     { padding: 0.9rem 1rem; }
+  #btn-decouvrir { width: auto; padding: 0 2.5rem; }
+
+  .presentation { padding: 4rem 2rem; max-width: 860px; margin: 0 auto; }
+  .presentation-header { margin-bottom: 3rem; }
+  .presentation-titre  { font-size: 2.2rem; }
+  .accords-grille { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+  .accord-card    { padding: 1.75rem; }
+  .accord-card:hover {
+    border-color: var(--jade-light);
+    box-shadow: 0 4px 20px rgba(61,122,111,0.1);
+  }
+  .presentation-nav { flex-direction: row; }
+  .presentation-nav .btn-nav { width: auto; }
+
+  .quiz-main    { padding: 3.5rem 2.5rem; max-width: 660px; margin: 0 auto; }
+  .q-number     { font-size: 5rem; margin-bottom: -0.75rem; }
+  .q-text       { font-size: 1.6rem; margin-bottom: 2.25rem; }
+  .progress-label { margin-bottom: 3rem; }
+
+  /* Sur tablette+ : Retour à gauche, Suivant à droite */
+  .quiz-nav { flex-direction: row; }
+  .quiz-nav .btn-nav { width: auto; }
+  .quiz-nav #btn-back { order: 0; opacity: 1; }
+  .quiz-nav #btn-next { order: 0; }
+
+  .results-hero   { padding: 5rem 2rem 4rem; }
+  .results-hero::before { width: 450px; height: 450px; top: -150px; right: -100px; }
+  .results-profile-name { font-size: 2.2rem; }
+  .results-body   { padding: 3.5rem 2rem; max-width: 880px; margin: 0 auto; }
+  .results-section-title { font-size: 1.5rem; }
+  .scores-grid    { grid-template-columns: repeat(2, 1fr); }
+  .score-card     { padding: 1.5rem; }
+  .sc-level-name  { font-size: 1.25rem; }
+
+  /* Durée : horizontal sur tablette+ */
+  .duree-bloc { flex-direction: row; }
+  .duree-item { border-bottom: none !important; }
+  .duree-item:first-child { border-bottom: none; }
+  .duree-sep  { display: block; width: 1.5px; height: 3rem; background: var(--ivoire-dark); flex-shrink: 0; align-self: center; }
+
+  .results-actions { flex-direction: row; justify-content: center; padding: 2.5rem 2rem; }
+  .results-actions .btn-nav { width: auto; }
+}
+
+/* ============================================================
+   DESKTOP — 1024px+
+   ============================================================ */
+@media (min-width: 1024px) {
+  .intro::before { width: 500px; height: 500px; top: -120px; right: -120px; }
+  .intro::after  { width: 300px; height: 300px; bottom: -80px; left: -80px; }
+  .intro-title   { font-size: 3.8rem; }
+
+  .presentation { padding: 5rem 2rem; }
+  .presentation-titre { font-size: 2.8rem; }
+
+  .quiz-main    { padding: 4rem 3rem; }
+  .q-number     { font-size: 5.5rem; }
+  .q-text       { font-size: 1.85rem; }
+
+  .results-hero { padding: 6rem 2rem 5rem; }
+  .results-hero::before { width: 600px; height: 600px; top: -200px; right: -150px; }
+  .results-profile-name { font-size: 3rem; }
+  .results-body { padding: 4rem 2rem; }
+}
+
+/* ============================================================
+   IMPRESSION
+   ============================================================ */
+@media print {
+  .btn-nav, .results-actions, #btn-decouvrir { display: none; }
+  body { background: white; }
+  .results-hero { background: #1C2333; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
